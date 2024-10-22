@@ -36,25 +36,35 @@ pipeline {
             }
         }
 
-        stage('Run Ansible Playbook on EC2') {
+        // stage('Run Ansible Playbook on EC2') {
+        //     steps {
+        //         // Run Ansible playbook on the remote EC2 instance
+        //         script {
+        //             // Create a temporary file for the private key
+        //             // def sshKeyFile = "${env.WORKSPACE}/key.pem"
+        //             // writeFile file: sshKeyFile, text: EC2_SSH_KEY.getPrivateKey()
+        //             // sh "chmod 400 ${sshKeyFile}"
+
+
+        //             sh """
+        //             chmod 400 key.pem
+        //             ls -al
+        //             pwd
+        //             ansible-playbook -i inventory.ini --private-key \$EC2_SSH_KEY ansible-playbook.yml
+        //             """
+        //         }
+        //     }
+        // }
+        stage("Execute Ansible") {
             steps {
-                // Run Ansible playbook on the remote EC2 instance
-                script {
-                    // Create a temporary file for the private key
-                    // def sshKeyFile = "${env.WORKSPACE}/key.pem"
-                    // writeFile file: sshKeyFile, text: EC2_SSH_KEY.getPrivateKey()
-                    // sh "chmod 400 ${sshKeyFile}"
+                ansiblePlaybook credentialsId: 'ec2-ssh-key',
+                                 disableHostKeyChecking: true,
+                                 installation: 'Ansible',
+                                 inventory: 'inventory.ini',
+                                 playbook: 'ansible-playbook.yml'
+            }    
+        }    
 
-
-                    sh """
-                    chmod 400 key.pem
-                    ls -al
-                    pwd
-                    ansible-playbook -i inventory.ini --private-key \$EC2_SSH_KEY ansible-playbook.yml
-                    """
-                }
-            }
-        }
     }
 
     post {
