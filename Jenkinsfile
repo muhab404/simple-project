@@ -2,8 +2,10 @@ pipeline {
     agent any
 
     environment {
-		DOCKERHUB_CREDENTIALS=credentials('dockerhub')
-        	EC2_SSH_KEY = credentials('ec2-ssh-key')  // Use the SSH key added to Jenkins credentials	}
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+        EC2_SSH_KEY = credentials('ec2-ssh-key')  // Use the SSH key added to Jenkins credentials
+    }
+
     stages {
         stage('Docker Login') {
             steps {
@@ -25,30 +27,15 @@ pipeline {
             }
         }
 
-        // stage('Run Tests') {
-        //     steps {
-        //         // Assuming you have tests (if not, you can remove this stage)
-        //         sh 'docker run --rm muhab404/comingsoon-page ./run-tests.sh'
-        //     }
-        // }
-
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Docker login
-                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                    // Push the Docker image
+                    // Push the Docker image to Docker Hub
                     sh 'docker push muhab404/comingsoon-page'
                 }
             }
         }
-        // stage('Build & push Dockerfile') {
-        //     steps {
-        //         sh """
-        //         ansible-playbook ansible-playbook.yml
-        //         """
-        //     }
-        // }
+
         stage('Run Ansible Playbook on EC2') {
             steps {
                 // Run Ansible playbook on the remote EC2 instance
@@ -58,7 +45,14 @@ pipeline {
                     --private-key \$EC2_SSH_KEY ansible-playbook.yml
                     """
                 }
+            }
+        }
+    }
 
-    } 
-}
+    post {
+        always {
+            // Clean up workspace after the pipeline completes
+            cleanWs()
+        }
+    }
 }
