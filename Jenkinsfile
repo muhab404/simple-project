@@ -41,8 +41,7 @@ pipeline {
                 // Run Ansible playbook on the remote EC2 instance
                 script {
                     sh """
-                    ansible-playbook -i '52.200.226.149,' -u ubuntu \
-                    --private-key \$EC2_SSH_KEY ansible-playbook.yml
+                    ansible-playbook -i inventory.ini --private-key \$EC2_SSH_KEY ansible-playbook.yml
                     """
                 }
             }
