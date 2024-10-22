@@ -40,11 +40,13 @@ pipeline {
             steps {
                 // Run Ansible playbook on the remote EC2 instance
                 script {
-                    sh """
+                    // Create a temporary file for the private key
                     def sshKeyFile = "${env.WORKSPACE}/key.pem"
                     writeFile file: sshKeyFile, text: EC2_SSH_KEY.getPrivateKey()
                     sh "chmod 400 ${sshKeyFile}"
 
+
+                    sh """
                     ls -al
                     pwd
                     ansible-playbook -i inventory.ini --private-key \$EC2_SSH_KEY ansible-playbook.yml
