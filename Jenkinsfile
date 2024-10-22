@@ -57,7 +57,7 @@ pipeline {
         // }
         stage("Execute Ansible") {
             steps {
-                ansiblePlaybook credentialsId: 'ec2-ssh-key',
+                ansiblePlaybook credentialsId: 'ssh',
                                  disableHostKeyChecking: true,
                                  installation: 'Ansible',
                                  inventory: 'inventory.ini',
