@@ -1,27 +1,57 @@
 ---
-- name: "Build a container with ansible"
-  hosts: localhost
-  
-  connection: local
+- name: "Build and run a container on remote EC2"
+  hosts: ec2
+  become: yes
   tasks:
-    - name: stop current running container
+  
+    # Ensure Docker is installed on the remote machine
+    - name: Update apt and install dependencies
+      apt:
+        update_cache: yes
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+        state: present
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Install Docker
+      apt:
+        name: 
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+
+    - name: Ensure Docker service is running
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    # Docker container management tasks
+    - name: Stop current running container
       command: docker stop web-container
       ignore_errors: yes
 
-    - name: remove stopped container
+    - name: Remove stopped container
       command: docker rm web-container
       ignore_errors: yes
 
-    - name: remove comingsoon-image
+    - name: Remove existing image
       command: docker rmi muhab404/comingsoon-page
       ignore_errors: yes
 
-    - name: build docker image using the Dockerfile
-      command: docker build -t muhab404/comingsoon-page .
-
-    - name: Push Image to dockerhub
-      command: docker push muhab404/comingsoon-page
-
-    - name: run container
+    - name: Run Docker container
       command: docker run -d --name web-container -p 80:80 muhab404/comingsoon-page
-
