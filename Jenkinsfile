@@ -3,12 +3,18 @@ pipeline {
 
     environment {
 		DOCKERHUB_CREDENTIALS=credentials('dockerhub')
-        EC2_SSH_KEY = credentials('ec2-ssh-key')  // Use the SSH key added to Jenkins credentials	}
+        	EC2_SSH_KEY = credentials('ec2-ssh-key')  // Use the SSH key added to Jenkins credentials	}
     stages {
         stage('Docker Login') {
             steps {
                 // Add --password-stdin to run docker login command non-interactively
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+        stage('Checkout') {
+            steps {
+                // Checkout the code from the repository
+                checkout scm
             }
         }
 
