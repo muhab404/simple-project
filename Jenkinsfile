@@ -68,6 +68,23 @@ pipeline {
     }
 
     post {
+        success {
+            emailext(
+                subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: "Job '${env.JOB_NAME}' has succeeded. Check console output at ${env.RUN_DISPLAY_URL}",
+                to: 'muhabseif@gmail.com',
+                recipientProviders: [[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']]
+            )
+        }
+        failure {
+            emailext(
+                subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: "Job '${env.JOB_NAME}' has failed. Check console output at ${env.RUN_DISPLAY_URL}",
+                to: 'muhabseif@gmail.com',
+                recipientProviders: [[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']]
+            )
+        }
+
         always {
             // Clean up workspace after the pipeline completes
             cleanWs()
