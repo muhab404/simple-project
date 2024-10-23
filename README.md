@@ -1,10 +1,5 @@
 # Create Jenkins EC2 on AWS using Terraform | Run Jenkins Pipeline using Jenkinsfile
-[Watch Terraform_Part1 شرح on YouTube](https://youtu.be/zF_N4flz8lw)
-
-[Watch Terraform_Part2 شرح on YouTube](https://youtu.be/V6CPs_C9v8A)
-
-[Watch Jenkins شرح on YouTube](https://youtu.be/awqwdGM_Trw)
-
+\
 
 ## Step 1:
 ### Build AWS EC2 Instance
