@@ -72,7 +72,7 @@ pipeline {
             emailext(
                 subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                 body: "Job '${env.JOB_NAME}' has succeeded. Check console output at ${env.RUN_DISPLAY_URL}",
-                to: 'muhabseif@gmail.com', 'ahmadbadawy291@gmail.com','yasminafikry92@gmail.com'
+                to: 'muhabseif@gmail.com', 'ahmadbadawy291@gmail.com','yasminafikry92@gmail.com','ahmadyahyaeltohamy@gmail.com'
                 recipientProviders: [[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']]
             )
         }
@@ -80,7 +80,7 @@ pipeline {
             emailext(
                 subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                 body: "Job '${env.JOB_NAME}' has failed. Check console output at ${env.RUN_DISPLAY_URL}",
-                to: 'muhabseif@gmail.com','ahmadbadawy291@gmail.com','yasminafikry92@gmail.com'
+                to: 'muhabseif@gmail.com','ahmadbadawy291@gmail.com','yasminafikry92@gmail.com','ahmadyahyaeltohamy@gmail.com'
                 recipientProviders: [[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']]
             )
         }
