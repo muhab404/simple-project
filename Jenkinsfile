@@ -72,7 +72,7 @@ pipeline {
             emailext(
                 subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                 body: "Job '${env.JOB_NAME}' has succeeded. Check console output at ${env.RUN_DISPLAY_URL}",
-                to: 'muhabseif@gmail.com',
+                to: 'muhabseif@gmail.com', 'ahmadbadawy291@gmail.com',
                 recipientProviders: [[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']]
             )
         }
